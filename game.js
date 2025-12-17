@@ -88,7 +88,8 @@
         cell.setAttribute('role', 'gridcell');
         cell.setAttribute('aria-expanded', 'false');
         const displayValue = this.pointValues[i] != null ? `$${this.pointValues[i]}` : '$?';
-        cell.textContent = displayValue;
+        cell.innerHTML = `<span class="question-text">${text}</span>`;
+
 
         const text = typeof questions[i] === 'string' ? questions[i] : null;
         if (text) {
@@ -96,7 +97,7 @@
             if (cell.classList.contains('revealed')) return;
             cell.classList.add('revealed');
             cell.setAttribute('aria-expanded', 'true');
-            cell.textContent = text;
+            cell.innerHTML = `<span class="question-text">${text}</span>`;
           });
         } else {
           cell.disabled = true;

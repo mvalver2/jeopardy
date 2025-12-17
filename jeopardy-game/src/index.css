@@ -1,0 +1,42 @@
+.board {
+  display: grid;
+  gap: 6px;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.cell {
+  background: #060ce9;
+  color: gold;
+  padding: 16px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell.revealed {
+  background: #0b1c4d;
+  color: #ffffff;
+  font-size: 0.8rem;
+}
+
+.header-cell {
+  background: #0015a8;
+  font-size: 0.9rem;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 12px 6px;
+  border-radius: 6px;
+  text-align: center;
+}
