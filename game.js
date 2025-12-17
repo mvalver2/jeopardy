@@ -39,7 +39,7 @@
    * - alpha: blend (0..1). 0 = original weights, 1 = fully recency-driven
    * - halfLifeDays: exponential half-life in days for freshness scoring
    */
-  function computeRecencyWeightedWeights(baseWeights, mostRecentDateByCategory, options) {
+  function computeRecencyWeights(baseWeights, mostRecentDateByCategory, options) {
     const alpha = Math.max(0, Math.min(1, Number(options.alpha || 0)));
     const halfLifeDays = Math.max(1, Number(options.halfLifeDays || 1825)); // ~5 years default
     if (alpha <= 0) return baseWeights;
@@ -91,7 +91,7 @@
    *  - data.categoryMostRecentAirDate: { [category]: 'YYYY-MM-DD' }
    *  - data.categoryDates: { [category]: ['YYYY-MM-DD', ...] } -> uses most recent
    */
-  function maybeApplyRecencyWeighting(baseWeights, data) {
+  function applyRecencyWeighting(baseWeights, data) {
     const alpha = getQueryNumber('recencyBoost', 0); // 0..1 suggested
     if (!(alpha > 0)) return baseWeights;
 
@@ -119,7 +119,7 @@
     if (!mostRecent) return baseWeights;
 
     const halfLifeDays = getQueryNumber('halfLifeDays', 1825);
-    return computeRecencyWeightedWeights(baseWeights, mostRecent, { alpha, halfLifeDays });
+    return computeRecencyWeights(baseWeights, mostRecent, { alpha, halfLifeDays });
   }
 
   /**
@@ -252,7 +252,7 @@
 
       const questionsByCategory = data.questionsByCategory || {};
       const baseWeights = data.weights || {};
-      const weights = maybeApplyRecencyWeighting(baseWeights, data);
+      const weights = applyRecencyWeighting(baseWeights, data);
       const sampler = new WeightedSampler(weights);
       const realBoard = new JeopardyBoard({
         container: boardEl,
