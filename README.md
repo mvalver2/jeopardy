@@ -1,3 +1,3 @@
-## What is Jeopardy!? (Statistically Weighted Jeopardy Trainer)
+## What is Jeopardy!? (Weighted Jeopardy Trainer)
 
-Any question is fair game for Jeopardy contestants, but some categories are more likely than others, 
+Any question is fair game for a Jeopardy contestant, but the game show's recurring themes and categories make strategic studying possible.
