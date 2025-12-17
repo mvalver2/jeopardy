@@ -34,6 +34,37 @@
   }
 
   /**
+   * Fisher–Yates shuffle for questions
+   */
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  /**
+   * Optionally shuffle questions within each category so repeated plays
+   * show different subsets when we take the first N rows.
+   * Toggle with URL param: shuffleQuestions=0 to disable (default enabled).
+   */
+  function prepareQuestionsByCategory(questionsByCategory) {
+    const params = new URLSearchParams(window.location.search || '');
+    const shouldShuffle = params.get('shuffleQuestions') !== '0';
+    if (!shouldShuffle) return questionsByCategory;
+    const out = {};
+    for (const [category, questions] of Object.entries(questionsByCategory)) {
+      const list = Array.isArray(questions) ? questions.slice() : [];
+      shuffleArray(list);
+      out[category] = list;
+    }
+    return out;
+  }
+
+  /**
    * Given base integer weights and a map of category->mostRecentDate (ISO string),
    * return new integer weights that bias toward more recent categories.
    * - alpha: blend (0..1). 0 = original weights, 1 = fully recency-driven
@@ -250,7 +281,7 @@
       boardEl.setAttribute('aria-busy', 'false');
       boardEl.innerHTML = '';
 
-      const questionsByCategory = data.questionsByCategory || {};
+      const questionsByCategory = prepareQuestionsByCategory(data.questionsByCategory || {});
       const baseWeights = data.weights || {};
       const weights = applyRecencyWeighting(baseWeights, data);
       const sampler = new WeightedSampler(weights);
@@ -279,7 +310,16 @@
 
       resetBtn.addEventListener('click', () => {
         realBoard.reset();
+        // Re-shuffle questions so repeated plays vary
+        const reshuffled = prepareQuestionsByCategory(data.questionsByCategory || {});
+        realBoard.questionsByCategory = reshuffled;
         addBtn.disabled = false;
+        // Pre-fill first column again
+        const first = chooseNextCategory(new WeightedSampler(weights), new Set());
+        if (first) {
+          realBoard.addCategory(first);
+        }
+        updateButtons();
       });
 
       // Pre-fill first column to get started
