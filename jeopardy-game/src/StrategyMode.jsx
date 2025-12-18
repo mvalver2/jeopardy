@@ -6,7 +6,7 @@ const STRATEGY_QUESTION_BANK = {
   "Which rows may the Daily Double appear in?":"Rows 2 to 5 (all but the top row, and most often in 4 or 5).",
   "What accuracy rate do you need for it to be profitable to go 'all in' on a Daily Double?": "50%. The average accuracy rate for the Daily Double is 65%. So, unless you have a large edge and a big lead, go crazy!",
   "What are the classically feared categories (that you may be able to exploit with extra training)?": "Opera, Shakespeare, Classical Music, Word Play...",
-  "Top players consistently buzz slightly more or less quickly than the average player?": "Slower. Buzzing in while the hosts are still speaking is a common mistake to avoid.",
+  "Top players consistently buzz slightly more or less quickly than the average player?": "Slower. Buzzing in while the hosts are still speaking is a common error.",
   "Which are valid reasons to jump between categories? 1. Disrupt opponents’ rhythm 2. Hide Daily Doubles 3. Force others to context-switch 4. All of the above": "4. (All of the above)",
   "At final Jeopardy, your opponent has $475 and you have $875. You feel like playing it safe. What’s the minimum amount you can bet to secure a victory should you both answer correctly?":"$76 (Your opponent may only bet up to his current winnings, putting him at $950 if he succeeds and requiring you to win $951 to have him covered).",
   "In Double Jeopardy, some common Daily Double spots are:": "Unusual categories, and the bottom row of a middle column.",
