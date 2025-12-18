@@ -1,9 +1,11 @@
 import { useState } from "react";
 import JeopardyMode from "./JeopardyMode";
+import FinalMode from "./FinalMode";
+import StrategyMode from "./StrategyMode";
 import SingleJeopardyData from "./single_jeopardy.json";
 import DoubleJeopardyData from "./double_jeopardy.json";
 import FinalJeopardyData from "./final_jeopardy.json";
-//import TrainerData from "./trainer.json"; 
+//import strategyData from "./strategy.json"; 
 
 export default function App() {
   const [mode, setMode] = useState(null);
@@ -22,8 +24,8 @@ export default function App() {
           <button style={styles.button} onClick={() => setMode("final")}>
             Final Jeopardy
           </button>
-          <button style={styles.button} onClick={() => setMode("trainer")}>
-            Trainer
+          <button style={styles.button} onClick={() => setMode("strategy")}>
+            Strategy
           </button>
         </div>
       </div>
@@ -36,9 +38,9 @@ export default function App() {
   case "double":
     return <JeopardyMode data={DoubleJeopardyData} onBackToMenu={() => setMode(null)} />;
   case "final":
-    return <JeopardyMode data={FinalJeopardyData} onBackToMenu={() => setMode(null)} />;
-  case "trainer":
-    return <JeopardyMode data={TrainerData} onBackToMenu={() => setMode(null)} />;
+    return <FinalMode data={FinalJeopardyData} onBackToMenu={() => setMode(null)} />;
+  case "strategy":
+    return <StrategyMode onBackToMenu={() => setMode(null)} />;
   default:
     return null;
 }
