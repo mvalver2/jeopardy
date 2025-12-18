@@ -58,7 +58,7 @@ export default function App() {
               <div style={styles.stepIcon}>3️⃣</div>
               <div>
                 <h3>Final Jeopardy</h3>
-                <p>Test your knowledge with the ultimate question</p>
+                <p>Test your knowledge with the ultimate question.</p>
               </div>
             </div>
 
