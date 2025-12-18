@@ -1,13 +1,36 @@
-import React, { useState } from "react";
-import "./JeopardyBoard.css"; 
+import React, { useState, useEffect } from "react";
+import "./JeopardyBoard.css";
 
-export default function Clue({ clue, score, setScore }) {
-  const [state, setState] = useState("hidden"); // hidden, showingQuestion, showingAnswer, answered
+const QUESTION_TIME = 30;
+const WARNING_TIME = 15;
+
+export default function Clue({ clue, score, setScore, disabled }) {
+  const [state, setState] = useState("hidden");
+  const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
 
   if (!clue) return <div className="clue disabled">?</div>;
 
+  /* ⏱ TIMER LOGIC */
+  useEffect(() => {
+    if (state !== "showingQuestion" && state !== "showingAnswer") return;
+
+    if (timeLeft <= 0) {
+      markIncorrect();
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [state, timeLeft]);
+
   const handleClick = () => {
-    if (state === "hidden") setState("showingQuestion");
+    if (state === "hidden") {
+      setTimeLeft(QUESTION_TIME);
+      setState("showingQuestion");
+    }
   };
 
   const showAnswer = (e) => {
@@ -16,37 +39,59 @@ export default function Clue({ clue, score, setScore }) {
   };
 
   const markCorrect = (e) => {
-    e.stopPropagation();
-    setScore(prev => prev + (clue.value || 0));
+    if (e) e.stopPropagation();
+    setScore((prev) => prev + (clue.value || 0));
     setState("answeredCorrect");
   };
 
   const markIncorrect = (e) => {
-    e.stopPropagation();
-    setScore(prev => prev - (clue.value || 0));
+    if (e) e.stopPropagation();
+    setScore((prev) => prev - (clue.value || 0));
     setState("answeredIncorrect");
   };
 
+  /* TIMER COLOR */
+  const timerStyle = {
+    color: timeLeft <= WARNING_TIME ? "#dc3545" : "#008000",
+    fontWeight: "bold",
+    marginTop: "0.5rem",
+  };
+
   let content;
+
   if (state === "hidden") {
     content = `$${clue.value}`;
-  } else if (state === "showingQuestion") {
+  } 
+  else if (state === "showingQuestion") {
     content = (
       <>
         <div>{clue.question}</div>
-        <button className="show-answer-btn" onClick={showAnswer}>Show Answer</button>
+        <div className="timer" style={timerStyle}>
+          ⏱ {timeLeft}s
+        </div>
+        <button className="show-answer-btn" onClick={showAnswer}>
+          Show Answer
+        </button>
       </>
     );
-  } else if (state === "showingAnswer") {
+  } 
+  else if (state === "showingAnswer") {
     content = (
       <>
         <div>{clue.answer}</div>
-        <button className="correct-btn" onClick={markCorrect}>Correct</button>
-        <button className="incorrect-btn" onClick={markIncorrect}>Incorrect</button>
+        <div className="timer" style={timerStyle}>
+          ⏱ {timeLeft}s
+        </div>
+        <button className="correct-btn" onClick={markCorrect}>
+          Correct
+        </button>
+        <button className="incorrect-btn" onClick={markIncorrect}>
+          Incorrect
+        </button>
       </>
     );
-  } else {
-    // answered (either correct or incorrect)
+  } 
+  else {
     content = <div>{clue.answer}</div>;
   }
 
